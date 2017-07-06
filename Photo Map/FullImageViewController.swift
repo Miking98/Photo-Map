@@ -9,11 +9,14 @@
 import UIKit
 
 class FullImageViewController: UIViewController {
-
+    
+    @IBOutlet weak var photoImageView: UIImageView!
+    var photo: UIImage!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        photoImageView.image = photo
     }
 
     override func didReceiveMemoryWarning() {

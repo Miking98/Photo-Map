@@ -76,7 +76,8 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         resizeRenderImageView.layer.render(in: UIGraphicsGetCurrentContext()!)
         let thumbnail = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        annotation.photo = thumbnail
+        annotation.thumbnail = thumbnail
+        annotation.photo = imageTaken
         
         mapView.addAnnotation(annotation)
     }
@@ -93,12 +94,16 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
             annotationView!.canShowCallout = true
         }
         
-        annotationView?.rightCalloutAccessoryView = detailButton
+        annotationView!.rightCalloutAccessoryView = detailButton
         annotationView!.leftCalloutAccessoryView = UIImageView(frame: CGRect(x:0, y:0, width: 50, height:50))
         let imageView = annotationView!.leftCalloutAccessoryView as! UIImageView
-        imageView.image = (annotation as! PhotoAnnotation).photo //UIImage(named: "camera")
-        
+        imageView.image = (annotation as! PhotoAnnotation).thumbnail
+        annotationView!.image = (annotation as! PhotoAnnotation).thumbnail
         return annotationView
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        performSegue(withIdentifier: "fullImageSegue", sender: view)
     }
     
     // MARK: - Navigation
@@ -108,6 +113,11 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         if (segue.identifier == "tagSegue") {
             let vc = segue.destination as! LocationsViewController
             vc.delegate = self
+        }
+        else if (segue.identifier == "fullImageSegue") {
+            let annotationView = sender as! MKAnnotationView
+            let vc = segue.destination as! FullImageViewController
+            vc.photo = (annotationView.annotation as! PhotoAnnotation).photo
         }
     }
     
