@@ -136,6 +136,11 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="5fH-cS-ctM">
+                                <rect key="frame" x="169" y="352" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -147,6 +152,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Add Location" id="cFw-mk-Xuq"/>
                     <connections>
+                        <outlet property="activitySpinner" destination="5fH-cS-ctM" id="OX8-Ue-3sW"/>
                         <outlet property="searchBar" destination="d2g-cJ-R4d" id="XdO-R1-Xx2"/>
                         <outlet property="tableView" destination="BsJ-w6-1O2" id="MoG-dS-3DM"/>
                     </connections>

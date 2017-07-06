@@ -23,6 +23,7 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         let sfRegion = MKCoordinateRegionMake(CLLocationCoordinate2DMake(37.783333, -122.416667),
                                               MKCoordinateSpanMake(0.1, 0.1))
         mapView.setRegion(sfRegion, animated: false)
+        mapView.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,13 +63,28 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
     
     func locationsPickedLocation(controller: LocationsViewController, latitude: NSNumber, longitude: NSNumber) {
         let locationCoordinate = CLLocationCoordinate2D(latitude: latitude as! CLLocationDegrees, longitude: longitude as! CLLocationDegrees)
-        let annotation = MKPointAnnotation()
+        let annotation = PhotoAnnotation()
         annotation.coordinate = locationCoordinate
-        annotation.title = "Picture"
+        
+        let resizeRenderImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 45, height: 45))
+        resizeRenderImageView.layer.borderColor = UIColor.white.cgColor
+        resizeRenderImageView.layer.borderWidth = 3.0
+        resizeRenderImageView.contentMode = UIViewContentMode.scaleAspectFill
+        resizeRenderImageView.image = imageTaken
+        
+        UIGraphicsBeginImageContext(resizeRenderImageView.frame.size)
+        resizeRenderImageView.layer.render(in: UIGraphicsGetCurrentContext()!)
+        let thumbnail = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        annotation.photo = thumbnail
+        
         mapView.addAnnotation(annotation)
     }
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        let detailButton: UIButton = UIButton(type: UIButtonType.detailDisclosure)
+
         let reuseID = "myAnnotationView"
         
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID)

@@ -20,7 +20,8 @@ class LocationsViewController: UIViewController, UITableViewDelegate, UITableVie
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-
+    @IBOutlet weak var activitySpinner: UIActivityIndicatorView!
+    
     var results: NSArray = []
     
     var delegate: LocationsViewControllerDelegate!
@@ -88,18 +89,21 @@ class LocationsViewController: UIViewController, UITableViewDelegate, UITableVie
             delegateQueue:OperationQueue.main
         )
         
-        let task : URLSessionDataTask = session.dataTask(with: request,
-            completionHandler: { (dataOrNil, response, error) in
-                if let data = dataOrNil {
-                    if let responseDictionary = try! JSONSerialization.jsonObject(
-                        with: data, options:[]) as? NSDictionary {
-                            NSLog("response: \(responseDictionary)")
-                            self.results = responseDictionary.value(forKeyPath: "response.venues") as! NSArray
-                            self.tableView.reloadData()
+        activitySpinner.startAnimating()
+        
+        let task : URLSessionDataTask = session.dataTask(with: request) { (dataOrNil, response, error) in
+            if let data = dataOrNil {
+                if let responseDictionary = try! JSONSerialization.jsonObject(
+                    with: data, options:[]) as? NSDictionary {
+                        self.results = responseDictionary.value(forKeyPath: "response.venues") as! NSArray
+                        self.tableView.reloadData()
 
-                    }
                 }
-        });
+            }
+            else if let error = error {
+            }
+            self.activitySpinner.stopAnimating()
+        }
         task.resume()
     }
 
