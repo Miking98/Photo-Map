@@ -8,14 +8,16 @@
 
 import UIKit
 
-class FullImageViewController: UIViewController {
+class FullImageViewController: UIViewController, UIScrollViewDelegate {
     
+    @IBOutlet weak var photoScrollView: UIScrollView!
     @IBOutlet weak var photoImageView: UIImageView!
     var photo: UIImage!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        photoScrollView.delegate = self
         photoImageView.image = photo
     }
 
@@ -24,7 +26,26 @@ class FullImageViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // This method is called as the user scrolls
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        // This method is called right as the user lifts their finger
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        // This method is called when the scrollview finally stops scrolling.
+    }
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return photoImageView
+    }
+    
     /*
     // MARK: - Navigation
 
